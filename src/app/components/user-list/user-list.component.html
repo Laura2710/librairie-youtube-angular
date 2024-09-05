@@ -1,7 +1,13 @@
 <ul>
+  @for (video of videos; track $index) {
   <li>
-    <img src="https://via.placeholder.com/150" alt="" />
-    <p>titre</p>
-    <button>Supprimer</button>
+    <img
+      [src]="video.thumbnail"
+      [alt]="video.title"
+      (click)="onVideoSelected(video)"
+    />
+    <p>{{ video.title }}</p>
+    <button (click)="onRemoveVideoFromList(video)">Supprimer</button>
   </li>
+  }
 </ul>

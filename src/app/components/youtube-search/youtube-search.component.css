@@ -1,3 +1,8 @@
+h1 {
+  margin-bottom: 2em;
+  text-align: center;
+}
+
 ul {
   margin-top: 2em;
 }
@@ -5,4 +10,16 @@ ul {
 li {
   list-style-type: none;
   margin-bottom: 2em;
+  display: flex;
+  align-items: center;
+  gap: 1em;
+}
+
+img {
+  width: 100px;
+}
+
+form {
+  margin: 0 auto;
+  width: fit-content;
 }

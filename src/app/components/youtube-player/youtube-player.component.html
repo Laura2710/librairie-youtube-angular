@@ -1,2 +1,10 @@
-<h1>Youtube Player</h1>
-<img src="https://via.placeholder.com/400" alt="" />
+<h1>YouTube Player</h1>
+
+<!-- Si aucune video n'est selectionnée, afficher un message -->
+@if (videoId == '') {
+<p>
+  Aucune vidéo sélectionnée. Veuillez cliquer sur une vidéo dans la liste pour
+  la visionner.
+</p>
+}
+<div id="player"></div>

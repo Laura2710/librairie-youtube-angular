@@ -1,13 +1,22 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { User } from '../models/user';
 import { isPlatformBrowser } from '@angular/common';
+import { Video } from '../models/video';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StorageLsService {
-  // PLATFORM_ID pour le SSR
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+  videoListSubject: BehaviorSubject<Video[]> = new BehaviorSubject<Video[]>([]);
+
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
+    // Charger les vidéos lors de l'initialisation
+    if (isPlatformBrowser(this.platformId)) {
+      const videos = this.getVideos();
+      this.videoListSubject.next(videos); // Initialisation du BehaviorSubject avec les vidéos
+    }
+  }
 
   // Sauvegarder l'utilisateur
   saveUser(user: User): void {
@@ -38,5 +47,36 @@ export class StorageLsService {
     return users.find(
       (user) => user.pseudo === pseudo && user.password === password
     );
+  }
+
+  // Récupérer les videos sauvegardées
+  getVideos(): Video[] {
+    if (isPlatformBrowser(this.platformId)) {
+      const videos = localStorage.getItem('videos');
+      if (videos) {
+        return JSON.parse(videos);
+      }
+    }
+    return [];
+  }
+
+  // Sauvegarder une video
+  saveVideo(video: Video): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const videos = this.getVideos();
+      videos.push(video);
+      localStorage.setItem('videos', JSON.stringify(videos));
+      this.videoListSubject.next(videos); // Mise à jour du BehaviorSubject
+    }
+  }
+
+  // Supprimer une video
+  removeVideo(video: Video): void {
+    if (isPlatformBrowser(this.platformId)) {
+      let videos = this.getVideos();
+      videos = videos.filter((v) => v.etag !== video.etag);
+      localStorage.setItem('videos', JSON.stringify(videos));
+      this.videoListSubject.next(videos); // Mise à jour du BehaviorSubject
+    }
   }
 }

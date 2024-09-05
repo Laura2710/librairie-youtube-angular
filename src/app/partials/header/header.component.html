@@ -1,8 +1,12 @@
 <header>
   <a [routerLink]="['/']">Projet Librairie YouTube</a>
   <nav>
+    @if(!isAuth) {
     <a [routerLink]="['/register']">S'inscrire</a>
+
+    } @else {
     <a [routerLink]="['/logout']">Se déconnecter</a>
     <a [routerLink]="['/youtube-library']">Ma Librairie Youtube</a>
+    }
   </nav>
 </header>
