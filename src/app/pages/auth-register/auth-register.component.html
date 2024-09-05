@@ -1,0 +1,32 @@
+<main>
+  <h1>Créer un compte</h1>
+  @if (form) {
+  <form [formGroup]="form" (submit)="onSubmit()">
+    <input type="text" formControlName="pseudo" placeholder="Pseudo" />
+    @if ( form.get('pseudo')?.hasError('required') &&
+    form.get('pseudo')?.touched){
+    <p class="error">Veuillez entrer votre pseudo</p>
+    }
+
+    <input type="email" formControlName="email" placeholder="Email" />
+    @if ( form.get('email')?.hasError('required') &&
+    form.get('email')?.touched){
+    <p class="error">Veuillez entrer votre email</p>
+    }
+
+    <input
+      type="password"
+      formControlName="password"
+      placeholder="Mot de passe"
+    />
+    @if ( form.get('password')?.hasError('required') &&
+    form.get('password')?.touched){
+    <p class="error">Veuillez entrer votre mot de passe</p>
+    }
+
+    <input type="submit" value="S'inscrire" />
+  </form>
+  <p class="success">{{ message }}</p>
+
+  }
+</main>

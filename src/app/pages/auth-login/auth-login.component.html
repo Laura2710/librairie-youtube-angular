@@ -1,0 +1,25 @@
+<main>
+  <h1>Login</h1>
+  @if (form) {
+  <form [formGroup]="form" (submit)="onSubmit()">
+    <input type="text" formControlName="pseudo" placeholder="Pseudo" />
+    @if ( form.get('pseudo')?.hasError('required') &&
+    form.get('pseudo')?.touched){
+    <p class="error">Veuillez entrer votre pseudo</p>
+    }
+
+    <input
+      type="password"
+      formControlName="password"
+      placeholder="Mot de passe"
+    />
+    @if ( form.get('password')?.hasError('required') &&
+    form.get('password')?.touched){
+    <p class="error">Veuillez entrer votre mot de passe</p>
+    }
+
+    <input type="submit" value="Se connecter" />
+    <p class="error">{{ message }}</p>
+  </form>
+  }
+</main>
