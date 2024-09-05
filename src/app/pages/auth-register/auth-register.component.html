@@ -3,18 +3,13 @@
   @if (form) {
   <form [formGroup]="form" (submit)="onSubmit()">
     <input type="text" formControlName="pseudo" placeholder="Pseudo" />
-    @if ( form.get('pseudo')?.hasError('required') &&
-    form.get('pseudo')?.touched){
-    <p class="error">Veuillez entrer votre pseudo</p>
-    } @if ( form.get('pseudo')?.hasError('minlength') &&
-    form.get('pseudo')?.touched){
-    <p class="error">Le pseudo doit avoir au moins 6 caractères</p>
+    @if (form.get('pseudo')?.touched && form.get('pseudo')?.invalid ) {
+    <p class="error">{{ getErrorMessage("pseudo") }}</p>
     }
 
     <input type="email" formControlName="email" placeholder="Email" />
-    @if ( form.get('email')?.hasError('required') &&
-    form.get('email')?.touched){
-    <p class="error">Veuillez entrer votre email</p>
+    @if (form.get('email')?.touched && form.get('email')?.invalid ) {
+    <p class="error">{{ getErrorMessage("email") }}</p>
     }
 
     <input
@@ -22,12 +17,8 @@
       formControlName="password"
       placeholder="Mot de passe"
     />
-    @if ( form.get('password')?.hasError('required') &&
-    form.get('password')?.touched){
-    <p class="error">Veuillez entrer votre mot de passe</p>
-    } @if ( form.get('password')?.hasError('minlength') &&
-    form.get('password')?.touched){
-    <p class="error">Le mot de passe doit avoir au moins 8 caractères</p>
+    @if (form.get('password')?.touched && form.get('password')?.invalid ) {
+    <p class="error">{{ getErrorMessage("password") }}</p>
     }
 
     <input type="submit" value="S'inscrire" />

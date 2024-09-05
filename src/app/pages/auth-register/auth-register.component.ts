@@ -24,7 +24,7 @@ export class AuthRegisterComponent {
     pseudo: new FormControl('', [Validators.required, Validators.minLength(6)]),
     password: new FormControl('', [
       Validators.required,
-      Validators.minLength(8),
+      Validators.minLength(6),
     ]),
     email: new FormControl('', Validators.required),
   });
@@ -41,5 +41,16 @@ export class AuthRegisterComponent {
       });
       this.message = 'Enregistrement reussi !';
     }
+  }
+
+  // Générer les erreurs dans une seule méthode
+  getErrorMessage(field: string) {
+    if (this.form.get(field)?.hasError('required')) {
+      return 'Ce champ est obligatoire';
+    } else if (this.form.get(field)?.hasError('minlength')) {
+      return 'Le champ doit avoir au moins 6 caractères';
+    }
+
+    return '';
   }
 }
