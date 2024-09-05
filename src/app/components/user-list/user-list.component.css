@@ -1,0 +1,11 @@
+li {
+  list-style-type: none;
+  display: flex;
+  gap: 2em;
+  justify-content: space-between;
+  align-items: center;
+}
+button {
+  height: 42px;
+  padding: 8px;
+}

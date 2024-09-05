@@ -33,4 +33,13 @@ export class StorageSsService {
       this.login();
     }
   }
+
+  // Récupérer le pseudo de l'utilisateur connecté
+  getUserPseudo(): string | undefined {
+    const user = sessionStorage.getItem('user');
+    if (user) {
+      return JSON.parse(user).pseudo;
+    }
+    return undefined;
+  }
 }

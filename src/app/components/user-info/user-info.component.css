@@ -1,0 +1,11 @@
+div {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  gap: 1em;
+}
+
+button {
+  height: 42px;
+  min-width: 200px;
+}
