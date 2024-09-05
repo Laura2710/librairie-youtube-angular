@@ -1,4 +1,5 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Inject, PLATFORM_ID } from '@angular/core';
+import { isPlatformBrowser } from '@angular/common';
 import { User } from '../models/user';
 import { BehaviorSubject } from 'rxjs';
 
@@ -13,17 +14,25 @@ export class StorageSsService {
   public readonly authenticationStatus =
     this.authenticationStatus$.asObservable();
 
+  // Injection de l'environnement du navigateur
+  constructor(@Inject(PLATFORM_ID) private platformId: Object) {}
+
+  // Connexion
   private login(): void {
     this.isAuthenticated = true;
     this.authenticationStatus$.next(this.isAuthenticated); // Mise à jour de l'Observable
   }
 
+  // Deconnexion
   logout(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.clear();
+    }
     this.isAuthenticated = false;
     this.authenticationStatus$.next(this.isAuthenticated); // Mise à jour de l'Observable
-    sessionStorage.clear();
   }
 
+  // Récupérer l'authentification
   isAuth(): boolean {
     this.getUser();
     return this.isAuthenticated;
@@ -31,22 +40,29 @@ export class StorageSsService {
 
   // Sauvegarder la session de l'utilisateur
   saveUser(user: User): void {
-    sessionStorage.setItem('user', JSON.stringify(user));
-    this.login();
-  }
-
-  getUser(): void {
-    const user = sessionStorage.getItem('user');
-    if (user) {
+    if (isPlatformBrowser(this.platformId)) {
+      sessionStorage.setItem('user', JSON.stringify(user));
       this.login();
     }
   }
 
-  // Récupérer le pseudo de l'utilisateur connecté
+  // Récupérer la session de l'utilisateur
+  getUser(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      const user = sessionStorage.getItem('user');
+      if (user) {
+        this.login();
+      }
+    }
+  }
+
+  // Récupérer le pseudo de l'utilisateur connecté
   getUserPseudo(): string | undefined {
-    const user = sessionStorage.getItem('user');
-    if (user) {
-      return JSON.parse(user).pseudo;
+    if (isPlatformBrowser(this.platformId)) {
+      const user = sessionStorage.getItem('user');
+      if (user) {
+        return JSON.parse(user).pseudo;
+      }
     }
     return undefined;
   }

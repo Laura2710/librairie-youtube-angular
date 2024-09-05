@@ -8,25 +8,23 @@ import { BehaviorSubject } from 'rxjs';
   providedIn: 'root',
 })
 export class StorageLsService {
+  private cachedVideos: Video[] = [];
   videoListSubject: BehaviorSubject<Video[]> = new BehaviorSubject<Video[]>([]);
 
-  constructor(@Inject(PLATFORM_ID) private platformId: Object) {
-    // Charger les vidéos lors de l'initialisation
+  constructor(@Inject(PLATFORM_ID) private readonly platformId: Object) {
     if (isPlatformBrowser(this.platformId)) {
-      const videos = this.getVideos();
-      this.videoListSubject.next(videos); // Initialisation du BehaviorSubject avec les vidéos
+      this.videoListSubject.next(this.getVideos());
     }
   }
 
   // Sauvegarder l'utilisateur
   saveUser(user: User): void {
     if (isPlatformBrowser(this.platformId)) {
-      const users = this.getUsers();
+      const users = JSON.parse(localStorage.getItem('users') ?? '[]');
       users.push(user);
       localStorage.setItem('users', JSON.stringify(users));
     }
   }
-
   // Récupérer tous les utilisateurs
   getUsers(): User[] {
     if (isPlatformBrowser(this.platformId)) {
@@ -52,31 +50,28 @@ export class StorageLsService {
   // Récupérer les videos sauvegardées
   getVideos(): Video[] {
     if (isPlatformBrowser(this.platformId)) {
-      const videos = localStorage.getItem('videos');
-      if (videos) {
-        return JSON.parse(videos);
-      }
+      this.cachedVideos = JSON.parse(localStorage.getItem('videos') ?? '[]');
     }
-    return [];
+    return this.cachedVideos || [];
   }
 
   // Sauvegarder une video
   saveVideo(video: Video): void {
     if (isPlatformBrowser(this.platformId)) {
       const videos = this.getVideos();
-      videos.push(video);
-      localStorage.setItem('videos', JSON.stringify(videos));
-      this.videoListSubject.next(videos); // Mise à jour du BehaviorSubject
+      const newVideos = [...videos, video];
+      localStorage.setItem('videos', JSON.stringify(newVideos));
+      this.videoListSubject.next(newVideos);
     }
   }
 
   // Supprimer une video
   removeVideo(video: Video): void {
     if (isPlatformBrowser(this.platformId)) {
-      let videos = this.getVideos();
-      videos = videos.filter((v) => v.etag !== video.etag);
+      const videos = this.getVideos().filter((v) => v.etag !== video.etag);
       localStorage.setItem('videos', JSON.stringify(videos));
-      this.videoListSubject.next(videos); // Mise à jour du BehaviorSubject
+      this.cachedVideos = videos;
+      this.videoListSubject.next(videos);
     }
   }
 }

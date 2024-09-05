@@ -21,11 +21,8 @@ export class UserListComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // S'abonner aux changements de la liste de vidéos
     this.subscription = this.storageService.videoListSubject.subscribe(
-      (videos) => {
-        this.videos = videos;
-      }
+      (videos) => (this.videos = videos)
     );
   }
 
@@ -34,10 +31,7 @@ export class UserListComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    // Désabonnement pour éviter les fuites de mémoire
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
+    this.subscription?.unsubscribe();
   }
 
   // Méthode appelée lorsqu'une vidéo est sélectionnée

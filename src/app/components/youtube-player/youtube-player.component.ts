@@ -20,32 +20,28 @@ export class YoutubePlayerComponent implements AfterViewInit, OnDestroy {
   public videoId: string = '';
   public player: any;
 
-  // Appelé une fois que le composant est chargé
+  // Appelé une fois que le composant est chargé et lorsqu'on a besoin d'intéragir avec le DOM
   ngAfterViewInit(): void {
     this.loadYouTubeAPI();
   }
 
   // Charger l'API YouTube IFrame
-  loadYouTubeAPI() {
-    // Vérifier si l'API est déjà chargée
-    if (window['YT'] && window['YT'].Player) {
-      // Si l'API est déjà prête, créer le lecteur immédiatement
-      this.initializePlayer();
-    } else {
-      // Si l'API n'est pas encore chargée, charger le script
-      const tag = document.createElement('script');
-      tag.src = 'https://www.youtube.com/iframe_api';
-      document.body.appendChild(tag);
+  loadYouTubeAPI(): void {
+    // Si l'API est déjà chargée, initialiser le lecteur
+    if (window['YT']?.Player) return this.initializePlayer();
 
-      // Définir la fonction de rappel de l'API
-      window['onYouTubeIframeAPIReady'] = () => {
-        this.initializePlayer();
-      };
-    }
+    // Si l'API n'est pas encore chargée, charger le script en mode asynchrone
+    const tag = document.createElement('script');
+    tag.src = 'https://www.youtube.com/iframe_api';
+    tag.async = true;
+    document.body.appendChild(tag);
+
+    // Définir la fonction de rappel de l'API
+    window['onYouTubeIframeAPIReady'] = () => this.initializePlayer();
   }
 
   // Initialiser le lecteur YouTube
-  initializePlayer() {
+  initializePlayer(): void {
     // S'abonner à l'ID de la vidéo sélectionnée
     this.youtubeService.selectedVideo$.subscribe((videoId) => {
       this.videoId = videoId;
@@ -54,25 +50,17 @@ export class YoutubePlayerComponent implements AfterViewInit, OnDestroy {
   }
 
   // Créer un lecteur YouTube ou mettre à jour l'existant
-  createPlayer(videoId: string) {
-    if (this.player) {
-      // Si un lecteur existe déjà, mettre à jour la vidéo
-      this.player.loadVideoById(videoId);
-    } else {
-      // Créer un nouveau lecteur si aucun n'existe
-      this.player = new window['YT'].Player('player', {
+  createPlayer(videoId: string): void {
+    this.player?.loadVideoById(videoId) ??
+      (this.player = new window['YT'].Player('player', {
         height: '360',
         width: '640',
-        videoId: videoId,
-        events: {
-          onStateChange: this.onPlayerStateChange,
-        },
-      });
-    }
+        videoId,
+        events: { onStateChange: this.onPlayerStateChange },
+      }));
   }
-
   // Réagir aux changements d'état du lecteur
-  onPlayerStateChange(event: any) {
+  onPlayerStateChange(event: any): void {
     if (event.data === window['YT'].PlayerState.PLAYING) {
       console.log('La vidéo est en train de jouer');
     }
@@ -80,8 +68,6 @@ export class YoutubePlayerComponent implements AfterViewInit, OnDestroy {
 
   // Détruire le lecteur lors de la destruction du composant
   ngOnDestroy(): void {
-    if (this.player) {
-      this.player.destroy();
-    }
+    this.player?.destroy();
   }
 }

@@ -2,8 +2,12 @@
 
 <!-- recupérer le formulaire -->
 <form [formGroup]="form" (submit)="onSubmit()">
-  <input type="search" formControlName="search" />
-  <input type="number" formControlName="maxResults" />
+  <input type="search" formControlName="search" placeholder="Rechercher" />
+  <input
+    type="number"
+    formControlName="maxResults"
+    placeholder="Nombre de resultats"
+  />
   <input type="submit" />
 </form>
 
