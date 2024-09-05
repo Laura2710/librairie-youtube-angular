@@ -1,4 +1,6 @@
-# ProjetLibrairieYoutube
+# Projet Librairie Youtube
+![image](https://github.com/user-attachments/assets/08daf1dc-beab-48f4-bc36-acc6901b40bf)
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.2.
 
