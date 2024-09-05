@@ -12,12 +12,12 @@ export class StorageSsService {
   }
 
   logout(): void {
-    this.login();
     this.isAuthenticated = false;
     sessionStorage.clear();
   }
 
   isAuth(): boolean {
+    this.getUser();
     return this.isAuthenticated;
   }
 
@@ -25,5 +25,12 @@ export class StorageSsService {
   saveUser(user: User): void {
     sessionStorage.setItem('user', JSON.stringify(user));
     this.login();
+  }
+
+  getUser(): void {
+    const user = sessionStorage.getItem('user');
+    if (user) {
+      this.login();
+    }
   }
 }
