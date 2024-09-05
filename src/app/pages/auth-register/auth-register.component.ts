@@ -21,12 +21,16 @@ export class AuthRegisterComponent {
 
   // Initialiser le formulaire
   form: FormGroup = new FormGroup({
-    pseudo: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    pseudo: new FormControl('', [
+      Validators.required,
+      Validators.minLength(6),
+      Validators.pattern('^[a-zA-Z0-9]+$'),
+    ]),
     password: new FormControl('', [
       Validators.required,
       Validators.minLength(6),
     ]),
-    email: new FormControl('', Validators.required),
+    email: new FormControl('', [Validators.required, Validators.email]),
   });
 
   // Message de success
@@ -49,6 +53,10 @@ export class AuthRegisterComponent {
       return 'Ce champ est obligatoire';
     } else if (this.form.get(field)?.hasError('minlength')) {
       return 'Le champ doit avoir au moins 6 caractères';
+    } else if (this.form.get(field)?.hasError('email')) {
+      return 'Veuillez entrer une adresse email valide';
+    } else if (this.form.get(field)?.hasError('pattern')) {
+      return 'Le pseudo ne doit contenir que des lettres et des chiffres';
     }
 
     return '';
