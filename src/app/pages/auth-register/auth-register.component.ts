@@ -21,8 +21,11 @@ export class AuthRegisterComponent {
 
   // Initialiser le formulaire
   form: FormGroup = new FormGroup({
-    pseudo: new FormControl('', Validators.required),
-    password: new FormControl('', Validators.required),
+    pseudo: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    password: new FormControl('', [
+      Validators.required,
+      Validators.minLength(8),
+    ]),
     email: new FormControl('', Validators.required),
   });
 
