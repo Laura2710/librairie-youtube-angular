@@ -1,4 +1,40 @@
 # Projet Librairie Youtube
+Mini-projet Angular.
+
+Cette application illustre une interface Angular permettant  
+l’intégration de données YouTube et la création de composants modulaires.
+
+---
+
+## 🚀 Fonctionnalités principales
+
+- Interface Angular structurée  
+- Manipulation de l'API de YouTube  
+- Composants réutilisables  
+- Navigation et affichage dynamique de données
+
+---
+
+## 🧰 Stack
+
+- Angular (TypeScript)   
+- HTML5 / CSS3  
+
+---
+
+## ▶️ Démarrage rapide
+
+```bash
+# Installer les dépendances
+npm install
+
+# Lancer l’application (dev)
+ng serve
+
+# Accéder à l’UI
+http://localhost:4200/
+```
+
 ![image](https://github.com/user-attachments/assets/08daf1dc-beab-48f4-bc36-acc6901b40bf)
 
 ![image](https://github.com/user-attachments/assets/cb43d9e2-858c-4353-b10d-f117add21262)
